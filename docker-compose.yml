@@ -7,4 +7,6 @@ services:
       - "5433:5432"
     restart: always
     environment:
+      POSTGRES_DB: business-api-rest
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
