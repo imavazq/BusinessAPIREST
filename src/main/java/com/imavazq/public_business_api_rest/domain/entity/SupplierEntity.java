@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder//Para instanciar rápido una clase
-@Entity//Permite que se pueda trabajar la clase con JPA
+//@Entity//Permite que se pueda trabajar la clase con JPA
 @Table(name = "suppliers")//Relaciona con tabla de BD
 public class SupplierEntity {
     @Id

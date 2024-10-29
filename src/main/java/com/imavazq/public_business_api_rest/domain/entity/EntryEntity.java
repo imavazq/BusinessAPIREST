@@ -31,7 +31,7 @@ public class EntryEntity {
     private Date date;//Se agrega desde service
 
     //Si no especifico CASCADE, no afecta a ProductEntity
-    @ManyToOne//Relación [Entry] >O---| [Product] (Un Product tiene o no varias Entry / Un Sale tiene un Product)
+    @ManyToOne//Relación [Entry] >O---| [Product] (Un Product tiene o no varias Entry / Un Entry tiene un Product)
     @JoinColumn(name = "product_id", nullable = false)//FK - Nombre de campo en la BD - NOT NULL
     private ProductEntity product;
 }

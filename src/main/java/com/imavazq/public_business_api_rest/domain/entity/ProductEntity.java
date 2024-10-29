@@ -37,12 +37,14 @@ public class ProductEntity {
     private String additionalNotes;
 
     //Si no especifico CASCADE, no afecta a ProductTypeEntity
-    @OneToMany//Un Product tiene un sólo ProductType / Un Supplier tiene o no varios ProductType)
+    @ManyToOne//Varios Products pueden pertenecer a un mismo ProductType, pero cada Product tiene sólo un ProductType
     @JoinColumn(name = "product_type_id", nullable = false)//FK - Nombre de campo en la BD - NOT NULL
-    private ProductTypeEntity productTypeId;
+    private ProductTypeEntity productType;
 
+
+    //VER si agrego Supplier en un futuro
     //Si no especifico CASCADE, no afecta a SupplierEntity
-    @OneToMany//Un Product tiene un sólo Supplier / Un Supplier tiene o no varios Products)
+    /*@ManyToOne//Varios Products pueden pertenecer a un mismo Supplier, pero cada Product tiene sólo un Supplier
     @JoinColumn(name = "supplier_id", nullable = false)//FK - Nombre de campo en la BD - NOT NULL
-    private SupplierEntity supplier;
+    private SupplierEntity supplier;*/
 }
