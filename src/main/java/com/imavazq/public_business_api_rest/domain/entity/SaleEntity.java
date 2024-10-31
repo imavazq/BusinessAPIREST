@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data//Crea getter,setters,equals,hashcodes
@@ -19,16 +20,17 @@ public class SaleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)//SERIAL en pgsql/autoincrement
     private Long id;
 
+    @Column(nullable = false)//NOT NULL
+    private Integer amount;
+
     @Column(name = "unit_price", nullable = false)//NOT NULL
     private Float unitPrice;
 
     @Column(name = "total_price", nullable = false)//NOT NULL
     private Float totalPrice;
 
-    @Column(nullable = false)//NOT NULL
-    private Integer amount;
-
-    private Date date;
+    @Column(columnDefinition = "TIMESTAMP(0)")//especifica que no almacena con milisegundos y microsegundos
+    private LocalDateTime date;
 
     //Si no especifico CASCADE, no afecta a ProductEntity
     @ManyToOne//Relación [Sale] >O---| [Product] (Un Product tiene o no varias Sales / Un Sale tiene un Product)

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data//Crea getter,setters,equals,hashcodes
@@ -28,7 +29,8 @@ public class EntryEntity {
     @Column(name = "total_cost", nullable = false)//NOT NULL
     private Float totalCost;
 
-    private Date date;//Se agrega desde service
+    @Column(columnDefinition = "TIMESTAMP(0)")//especifica que no almacena con milisegundos y microsegundos
+    private LocalDateTime date;//Se agrega desde service //Tiene este formato para que coincida con el de la BD
 
     //Si no especifico CASCADE, no afecta a ProductEntity
     @ManyToOne//Relación [Entry] >O---| [Product] (Un Product tiene o no varias Entry / Un Entry tiene un Product)

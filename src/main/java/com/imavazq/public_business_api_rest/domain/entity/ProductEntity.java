@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//SERIAL en pgsql/autoincrement
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_type_id_seq")
     private Long id;
 
     @Column(nullable = false, length = 10)//NOT NULL - VARCHAR(10)
@@ -37,7 +38,8 @@ public class ProductEntity {
     private String additionalNotes;
 
     //Si no especifico CASCADE, no afecta a ProductTypeEntity
-    @ManyToOne//Varios Products pueden pertenecer a un mismo ProductType, pero cada Product tiene sólo un ProductType
+    /// Si especifico CASCADE, al recuperar el Product puedo también trabajar con su ProductType y sus modificaciones también afectan en la BD
+    @ManyToOne//(cascade = CascadeType.ALL)//Varios Products pueden pertenecer a un mismo ProductType, pero cada Product tiene sólo un ProductType
     @JoinColumn(name = "product_type_id", nullable = false)//FK - Nombre de campo en la BD - NOT NULL
     private ProductTypeEntity productType;
 

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class ProductTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//SERIAL en pgsql/autoincrement
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_type_id_seq")
     private Long id;
 
     @Column(length = 100, nullable = false, unique = true)//VARCHAR(100) - NOT NULL - UNIQUE
