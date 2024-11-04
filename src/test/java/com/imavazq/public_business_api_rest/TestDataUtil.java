@@ -1,5 +1,9 @@
 package com.imavazq.public_business_api_rest;
 
+import com.imavazq.public_business_api_rest.domain.dto.EntryDto;
+import com.imavazq.public_business_api_rest.domain.dto.ProductDto;
+import com.imavazq.public_business_api_rest.domain.dto.ProductTypeDto;
+import com.imavazq.public_business_api_rest.domain.dto.SaleDto;
 import com.imavazq.public_business_api_rest.domain.entity.EntryEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
@@ -13,8 +17,15 @@ public final class TestDataUtil {
     private TestDataUtil() {
     }
 
-    public static ProductTypeEntity createTestProductTypeA(){
+    public static ProductTypeEntity createTestProductTypeA() {
         return ProductTypeEntity.builder()
+                .id(1L)
+                .description("Tipo A")
+                .build();
+    }
+
+    public static ProductTypeDto createTestProductTypeDtoA(){
+        return ProductTypeDto.builder()
                 .id(1L)
                 .description("Tipo A")
                 .build();
@@ -22,6 +33,13 @@ public final class TestDataUtil {
 
     public static ProductTypeEntity createTestProductTypeB(){
         return ProductTypeEntity.builder()
+                .id(2L)
+                .description("Tipo B")
+                .build();
+    }
+
+    public static ProductTypeDto createTestProductTypeDtoB() {
+        return ProductTypeDto.builder()
                 .id(2L)
                 .description("Tipo B")
                 .build();
@@ -37,6 +55,19 @@ public final class TestDataUtil {
                 .stockAvailable(0)
                 .additionalNotes("asd")
                 .productType(productTypeEntity)
+                .build();
+    }
+
+    public static ProductDto createTestProductDtoA(final ProductTypeDto productTypeDto){
+        return ProductDto.builder()
+                .id(1L)
+                .article("artA")
+                .size("S")
+                .description("asd")
+                .price(123.3F)
+                .stockAvailable(0)
+                .additionalNotes("asd")
+                .productType(productTypeDto)
                 .build();
     }
 
@@ -64,6 +95,17 @@ public final class TestDataUtil {
                 .build();
     }
 
+    public static EntryDto createTestEntryA(final ProductDto productDto){
+        return EntryDto.builder()
+                .id(1L)
+                .amount(1)
+                .unitCost(111.1F)
+                .totalCost(111.1F)//TODO: Que se calcule solo (por ahora queda así para el test)
+                .date(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .product(productDto)
+                .build();
+    }
+
     public static EntryEntity createTestEntryB(final ProductEntity productEntity){
         return EntryEntity.builder()
                 .id(2L)
@@ -86,6 +128,17 @@ public final class TestDataUtil {
                 .build();
     }
 
+    public static SaleDto createTestSaleDtoA(final ProductDto productDto){
+        return SaleDto.builder()
+                .id(1L)
+                .amount(1)
+                .unitPrice(111.1F)
+                .totalPrice(111.1F)//TODO: Que se calcule solo (por ahora queda así para el test)
+                .date(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .product(productDto)
+                .build();
+    }
+
     public static SaleEntity createTestSaleB(final ProductEntity productEntity){
         return SaleEntity.builder()
                 .id(2L)
@@ -96,4 +149,6 @@ public final class TestDataUtil {
                 .product(productEntity)
                 .build();
     }
+
+
 }
