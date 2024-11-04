@@ -46,7 +46,7 @@ public class ProductTypeController {
     }
 
     @GetMapping(path = "/api/v1/productType/{id}")
-    public ResponseEntity<ProductTypeDto> listProductTypes(@PathVariable("id") Long id){
+    public ResponseEntity<ProductTypeDto> getProductType(@PathVariable("id") Long id){
         Optional<ProductTypeEntity> foundProductType = productTypeService.findOne(id);
 
         return foundProductType.map(productTypeEntity -> {  //Si Optional tiene algo:
@@ -69,9 +69,10 @@ public class ProductTypeController {
 
         //Hago UPDATE (mismo método que create pero devuelvo distinto http status)
         ProductTypeEntity savedProductTypeEntity = productTypeService.save(productTypeEntity);
+        ProductTypeDto savedProductTypeDto = productTypeMapper.mapTo(savedProductTypeEntity);
 
         return new ResponseEntity<>(
-                productTypeMapper.mapTo(savedProductTypeEntity),
+                savedProductTypeDto,
                 HttpStatus.OK //status 200 OK
         );
     }
@@ -85,13 +86,15 @@ public class ProductTypeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Si no existe --> 404 not found
         }
 
+        //productTypeDto.setId(id); //lo hago en service en este caso, no como en PUT (invoco a save())
         ProductTypeEntity productTypeEntity = productTypeMapper.mapFrom(productTypeDto);
 
         //Hago partial UPDATE
         ProductTypeEntity updatedProductType = productTypeService.partialUpdate(id, productTypeEntity);
+        ProductTypeDto savedProductTypeDto = productTypeMapper.mapTo(updatedProductType);
 
         return new ResponseEntity<>(
-                productTypeMapper.mapTo(updatedProductType),
+                savedProductTypeDto,
                 HttpStatus.OK //status 200 OK
         );
     }

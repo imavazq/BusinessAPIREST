@@ -28,7 +28,7 @@ public class ProductTypeServiceImpl implements IProductTypeService {
     public List<ProductTypeEntity> findAll() {
         return StreamSupport.stream(productTypeRepository //paso a Stream para poder pasar Iterable a Stream
                                 .findAll()
-                                .spliterator(), //convierto el Iterable<AuthorEntity> en Spliterator<AuthorEntity>, para poder crear el Stream
+                                .spliterator(), //convierto el Iterable<ProductTypeEntity> en Spliterator<ProductTypeEntity>, para poder crear el Stream
                         false)//stream secuencial
                 .collect(Collectors.toList()); //convierto a lista
     }
