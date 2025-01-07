@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration //para indicar que es una clase que contiene beans
 public class MapperConfig {
 
-    @Bean
+    @Bean //Puedo inyectar método como si fuera una clase bean
     public ModelMapper modelMapper(){
         ModelMapper modelMapper = new ModelMapper();
 

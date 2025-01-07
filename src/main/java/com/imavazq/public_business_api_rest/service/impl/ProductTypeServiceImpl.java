@@ -53,7 +53,7 @@ public class ProductTypeServiceImpl implements IProductTypeService {
 
             //actualizo producType recuperado con nueva desc
             return productTypeRepository.save(existingProductType);
-        }).orElseThrow(() -> new RuntimeException("El tipo de producto no existe.")); //Si no se encuentra en la BD
+        }).orElseThrow(() -> new RuntimeException("El tipo de producto no existe.")); //Si no se encuentra en la BD entro por Optional = null (devuelto por findById)
     }
 
     @Override

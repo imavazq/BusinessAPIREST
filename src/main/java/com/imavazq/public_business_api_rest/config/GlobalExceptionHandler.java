@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+//Clase @Component declarativa de beans
 //Clase para manejar excepciones (logeo y muestro mensaje simple al cliente)
 @RestControllerAdvice
 public class GlobalExceptionHandler {

@@ -84,6 +84,19 @@ public final class TestDataUtil {
                 .build();
     }
 
+    public static ProductDto createTestProductDtoB(ProductTypeDto productTypeDto) {
+        return ProductDto.builder()
+                .id(2L)
+                .article("artB")
+                .size("M")
+                .description("asd")
+                .price(100F)
+                .stockAvailable(0)
+                .additionalNotes("asd")
+                .productType(productTypeDto)
+                .build();
+    }
+
     public static EntryEntity createTestEntryA(final ProductEntity productEntity){
         return EntryEntity.builder()
                 .id(1L)
@@ -149,6 +162,5 @@ public final class TestDataUtil {
                 .product(productEntity)
                 .build();
     }
-
 
 }

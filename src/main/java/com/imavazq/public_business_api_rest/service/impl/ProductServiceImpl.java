@@ -46,7 +46,8 @@ public class ProductServiceImpl implements IProductService {
 
         return productRepository.findById(id).map(existingProduct -> { //Si encuentra existingProduct (product resultado)
             //Si nuevo article de product a actualizar no es null -> se lo asigno al product recuperado
-            Optional.ofNullable(productEntity.getArticle()).ifPresent(existingProduct::setArticle);
+            //Optional.ofNullable(productEntity.getArticle()).ifPresent((article) -> existingProduct.setArticle(article));
+            Optional.ofNullable(productEntity.getArticle()).ifPresent(existingProduct::setArticle); //Asigno article obtenido en el getArticle()
             Optional.ofNullable(productEntity.getSize()).ifPresent(existingProduct::setSize);
             Optional.ofNullable(productEntity.getDescription()).ifPresent(existingProduct::setDescription);
             Optional.ofNullable(productEntity.getPrice()).ifPresent(existingProduct::setPrice);
@@ -55,8 +56,11 @@ public class ProductServiceImpl implements IProductService {
 
             //valido que productType exista en la BD antes de asignarlo (decisión de diseño que no sea CASCADE)
             Optional.ofNullable(productEntity.getProductType()).ifPresent(newProductType -> {
-                ProductTypeEntity existingProductType = productTypeRepository.findById(newProductType.getId())
-                        .orElseThrow(() -> new RuntimeException("El tipo de producto no existe."));
+                ProductTypeEntity existingProductType =
+                        productTypeRepository
+                                .findById(newProductType.getId()) //busco en BD
+                                .orElseThrow(() -> new RuntimeException("El tipo de producto no existe.")); //si no está en la BD lanzo exception
+
                 existingProduct.setProductType(existingProductType);
             });
 

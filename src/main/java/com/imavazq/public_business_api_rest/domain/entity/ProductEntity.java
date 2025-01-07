@@ -44,7 +44,7 @@ public class ProductEntity {
     private ProductTypeEntity productType;
 
 
-    //VER si agrego Supplier en un futuro
+    //TODO: VER si agrego Supplier en un futuro
     //Si no especifico CASCADE, no afecta a SupplierEntity
     /*@ManyToOne//Varios Products pueden pertenecer a un mismo Supplier, pero cada Product tiene sólo un Supplier
     @JoinColumn(name = "supplier_id", nullable = false)//FK - Nombre de campo en la BD - NOT NULL
