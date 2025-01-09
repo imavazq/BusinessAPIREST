@@ -23,7 +23,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductEntity save(ProductEntity productEntity) { return productRepository.save(productEntity); }
+    public ProductEntity save(ProductEntity productEntity) {
+        //TODO: Agregar validación existencia productType
+        return productRepository.save(productEntity);
+    }
 
     @Override
     public List<ProductEntity> findAll() {
