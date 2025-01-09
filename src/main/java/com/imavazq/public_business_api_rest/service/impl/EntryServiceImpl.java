@@ -2,7 +2,6 @@ package com.imavazq.public_business_api_rest.service.impl;
 
 import com.imavazq.public_business_api_rest.domain.entity.EntryEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
-import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.repository.EntryRepository;
 import com.imavazq.public_business_api_rest.repository.ProductRepository;
 import com.imavazq.public_business_api_rest.service.IEntryService;
@@ -56,11 +55,10 @@ public class EntryServiceImpl implements IEntryService {
         return entryRepository.findById(id).map(existingEntry -> {//Si encuentra existingEntry (entry resultado)
             //Si nuevo amount de entry a actualizar no es null -> se lo asigno al entry recuperado
             //Optional.ofNullable(entryEntity.getAmount()).ifPresent(amount -> entryEntity.setAmount(amount));
-            Optional.ofNullable(entryEntity.getAmount()).ifPresent(entryEntity::setAmount);
-            Optional.ofNullable(entryEntity.getUnitCost()).ifPresent(entryEntity::setUnitCost);
-            Optional.ofNullable(entryEntity.getTotalCost()).ifPresent(entryEntity::setTotalCost);
-            Optional.ofNullable(entryEntity.getDate()).ifPresent(entryEntity::setDate);
-            Optional.ofNullable(entryEntity.getProduct()).ifPresent(entryEntity::setProduct);
+            Optional.ofNullable(entryEntity.getAmount()).ifPresent(existingEntry::setAmount);
+            Optional.ofNullable(entryEntity.getUnitCost()).ifPresent(existingEntry::setUnitCost);
+            Optional.ofNullable(entryEntity.getTotalCost()).ifPresent(existingEntry::setTotalCost);
+            Optional.ofNullable(entryEntity.getDate()).ifPresent(existingEntry::setDate);
 
             //valido que product exista en la BD antes de asignarlo (decisión de diseño que no sea CASCADE)
             Optional.ofNullable(entryEntity.getProduct()).ifPresent(newProduct -> {
@@ -71,7 +69,10 @@ public class EntryServiceImpl implements IEntryService {
                 //TODO: Personalizar exception
                 existingEntry.setProduct(existingProduct);
             });
-        });
+
+            //Actualizo entry recuperado
+            return entryRepository.save(entryEntity);
+        }).orElseThrow(() -> new RuntimeException("El entry no existe.")); //No se encontró el entry en la bd
     }
 
     @Override
