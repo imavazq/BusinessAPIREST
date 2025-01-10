@@ -71,7 +71,7 @@ public class EntryServiceImpl implements IEntryService {
             });
 
             //Actualizo entry recuperado
-            return entryRepository.save(entryEntity);
+            return entryRepository.save(existingEntry);
         }).orElseThrow(() -> new RuntimeException("El entry no existe.")); //No se encontró el entry en la bd
     }
 
