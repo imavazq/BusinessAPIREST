@@ -1,6 +1,5 @@
 package com.imavazq.public_business_api_rest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imavazq.public_business_api_rest.TestDataUtil;
 import com.imavazq.public_business_api_rest.domain.dto.ProductDto;
@@ -22,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.print.attribute.standard.Media;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -119,7 +117,7 @@ public class ProductControllerIntegrationTest {
 
     //Tests READ MANY
     @Test
-    public void testThatListProductReturnsHttpStatus200() throws Exception {
+    public void testThatListProductsReturnsHttpStatus200() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -348,7 +346,7 @@ public class ProductControllerIntegrationTest {
     }
 
     @Test
-    public void testThatPartialUpdateProductTypeReturnsUpdatedProduct() throws Exception {
+    public void testThatPartialUpdateProductReturnsUpdatedProduct() throws Exception {
         //primero creo productType
         ProductTypeEntity testProductTypeEntityA = TestDataUtil.createTestProductTypeA();
         ProductTypeEntity savedProductTypeEntity = productTypeService.save(testProductTypeEntityA);

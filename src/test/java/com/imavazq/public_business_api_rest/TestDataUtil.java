@@ -108,7 +108,7 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static EntryDto createTestEntryA(final ProductDto productDto){
+    public static EntryDto createTestEntryDtoA(final ProductDto productDto){
         return EntryDto.builder()
                 .id(1L)
                 .amount(1)
@@ -127,6 +127,17 @@ public final class TestDataUtil {
                 .totalCost(444.4F)//TODO: Que se calcule solo (por ahora queda así para el test)
                 .date(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
                 .product(productEntity)
+                .build();
+    }
+
+    public static EntryDto createTestEntryDtoB(final ProductDto productDto){
+        return EntryDto.builder()
+                .id(2L)
+                .amount(2)
+                .unitCost(222.2F)
+                .totalCost(444.4F)//TODO: Que se calcule solo (por ahora queda así para el test)
+                .date(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .product(productDto)
                 .build();
     }
 
