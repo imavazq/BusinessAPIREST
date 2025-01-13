@@ -1,12 +1,15 @@
 package com.imavazq.public_business_api_rest.controller;
 
 import com.imavazq.public_business_api_rest.domain.dto.EntryDto;
+import com.imavazq.public_business_api_rest.domain.dto.groups.OnPartialUpdate;
 import com.imavazq.public_business_api_rest.domain.entity.EntryEntity;
 import com.imavazq.public_business_api_rest.mapper.IMapper;
 import com.imavazq.public_business_api_rest.service.IEntryService;
+import jakarta.validation.Valid;
 import org.springframework.data.jpa.domain.AbstractAuditable_;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +27,7 @@ public class EntryController {
     }
 
     @PostMapping(path = "/api/v1/entry")
-    public ResponseEntity<EntryDto> createEntry(@RequestBody EntryDto entryDto){
+    public ResponseEntity<EntryDto> createEntry(@Valid @RequestBody EntryDto entryDto){
         EntryEntity entryEntity = entryMapper.mapFrom(entryDto);
         EntryEntity savedEntryEntity = entryService.save(entryEntity);
 
@@ -55,7 +58,7 @@ public class EntryController {
 
     @PutMapping(path = "/api/v1/entry/{id}")
     public ResponseEntity<EntryDto> fullUpdateEntry(
-            @PathVariable("id") Long id, @RequestBody EntryDto entryDto
+            @PathVariable("id") Long id, @Valid @RequestBody EntryDto entryDto
     ){
         if(!entryService.isExists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -71,7 +74,7 @@ public class EntryController {
 
     @PatchMapping(path = "/api/v1/entry/{id}")
     public ResponseEntity<EntryDto> partialUpdateEntry(
-            @PathVariable("id") Long id, @RequestBody EntryDto entryDto
+            @PathVariable("id") Long id, @Validated(OnPartialUpdate.class) @RequestBody EntryDto entryDto
     ){
         if(!entryService.isExists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

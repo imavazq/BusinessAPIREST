@@ -1,11 +1,14 @@
 package com.imavazq.public_business_api_rest.controller;
 
 import com.imavazq.public_business_api_rest.domain.dto.ProductTypeDto;
+import com.imavazq.public_business_api_rest.domain.dto.groups.OnPartialUpdate;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.mapper.IMapper;
 import com.imavazq.public_business_api_rest.service.IProductTypeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +30,7 @@ public class ProductTypeController {
     }
 
     @PostMapping(path = "/api/v1/productType")
-    public ResponseEntity<ProductTypeDto> createProductType(@RequestBody ProductTypeDto productTypeDto){
+    public ResponseEntity<ProductTypeDto> createProductType(@Valid @RequestBody ProductTypeDto productTypeDto){
         ProductTypeEntity productTypeEntity = productTypeMapper.mapFrom(productTypeDto);//Pasamos de DTO a Entity
         ProductTypeEntity savedProductTypeEntity = productTypeService.save(productTypeEntity);
         //Derivamos a service para que maneje la creación en la BD (lo hace realmente capa Repository)
@@ -57,7 +60,7 @@ public class ProductTypeController {
 
     @PutMapping(path = "/api/v1/productType/{id}")
     public ResponseEntity<ProductTypeDto> fullUpdateProductType(
-            @PathVariable("id") Long id, @RequestBody ProductTypeDto productTypeDto
+            @PathVariable("id") Long id, @Valid @RequestBody ProductTypeDto productTypeDto
     ){
         //Primero valido que el productType exista
         if (!productTypeService.isExists(id)){
@@ -79,7 +82,7 @@ public class ProductTypeController {
 
     @PatchMapping(path = "/api/v1/productType/{id}")
     public ResponseEntity<ProductTypeDto> partialUpdateProductType(
-            @PathVariable("id") Long id, @RequestBody ProductTypeDto productTypeDto
+            @PathVariable("id") Long id, @Validated(OnPartialUpdate.class) @RequestBody ProductTypeDto productTypeDto
     ){
         //Primero valido que el productType exista
         if (!productTypeService.isExists(id)){

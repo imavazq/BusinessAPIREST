@@ -1,11 +1,14 @@
 package com.imavazq.public_business_api_rest.controller;
 
 import com.imavazq.public_business_api_rest.domain.dto.ProductDto;
+import com.imavazq.public_business_api_rest.domain.dto.groups.OnPartialUpdate;
 import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.mapper.IMapper;
 import com.imavazq.public_business_api_rest.service.IProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +28,7 @@ public class ProductController {
     }
 
     @PostMapping(path = "/api/v1/product")
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto){
+    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto productDto){
         ProductEntity productEntity = productMapper.mapFrom(productDto);
         ProductEntity savedProductEntity = productService.save(productEntity);
 
@@ -58,7 +61,7 @@ public class ProductController {
 
     @PutMapping(path = "/api/v1/product/{id}")
     public ResponseEntity<ProductDto> fullUpdateProduct(
-            @PathVariable("id") Long id, @RequestBody ProductDto productDto
+            @PathVariable("id") Long id, @Valid @RequestBody ProductDto productDto
     ){
         if(!productService.isExists(id)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Si no existe --> 404 not found
@@ -76,7 +79,7 @@ public class ProductController {
 
     @PatchMapping(path = "/api/v1/product/{id}")
     public ResponseEntity<ProductDto> partialUpdateProduct(
-            @PathVariable("id") Long id, @RequestBody ProductDto productDto
+            @PathVariable("id") Long id, @Validated(OnPartialUpdate.class) @RequestBody ProductDto productDto
     ){
         if(!productService.isExists(id)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Si no existe --> 404 not found
