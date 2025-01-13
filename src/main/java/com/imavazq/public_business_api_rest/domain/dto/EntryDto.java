@@ -32,10 +32,10 @@ public class EntryDto {
     @JsonProperty("unit_cost")
     private Float unitCost;
 
-    //@Null TODO: ver si tiene más sentido dejarlo como null en dto y not null en entity (para almacenamiento en bd)
-    @NotNull(message = "Total cost is mandatory", groups = Default.class)
-    @PositiveOrZero(message ="The total cost must be positive or zero", groups = {Default.class, OnPartialUpdate.class})
-    @JsonProperty("total_cost")
+    @Null(message = "This field must be null", groups = {Default.class, OnPartialUpdate.class})
+    //@NotNull(message = "Total cost is mandatory", groups = Default.class)
+    //@PositiveOrZero(message ="The total cost must be positive or zero", groups = {Default.class, OnPartialUpdate.class})
+    //@JsonProperty("total_cost")
     private Float totalCost;
 
     @Null(message = "This field must be null", groups = {Default.class, OnPartialUpdate.class})

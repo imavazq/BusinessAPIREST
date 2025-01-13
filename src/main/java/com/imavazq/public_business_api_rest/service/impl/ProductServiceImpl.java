@@ -5,6 +5,7 @@ import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.repository.ProductRepository;
 import com.imavazq.public_business_api_rest.repository.ProductTypeRepository;
 import com.imavazq.public_business_api_rest.service.IProductService;
+import com.imavazq.public_business_api_rest.service.IProductTypeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,16 +16,18 @@ import java.util.stream.StreamSupport;
 @Service//Especificamos que se trata de una clase Service (Bean)
 public class ProductServiceImpl implements IProductService {
     private ProductRepository productRepository;
-    private ProductTypeRepository productTypeRepository;
+    private IProductTypeService productTypeService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductTypeRepository productTypeRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, IProductTypeService productTypeService) {
         this.productRepository = productRepository;
-        this.productTypeRepository = productTypeRepository;
+        this.productTypeService = productTypeService;
     }
 
     @Override
     public ProductEntity save(ProductEntity productEntity) {
-        //TODO: Agregar validación existencia productType
+        if(!productTypeService.isExists(productEntity.getProductType().getId()))
+            throw new RuntimeException("El tipo de producto no existe.");
+
         return productRepository.save(productEntity);
     }
 
@@ -60,8 +63,8 @@ public class ProductServiceImpl implements IProductService {
             //valido que productType exista en la BD antes de asignarlo (decisión de diseño que no sea CASCADE)
             Optional.ofNullable(productEntity.getProductType()).ifPresent(newProductType -> {
                 ProductTypeEntity existingProductType =
-                        productTypeRepository
-                                .findById(newProductType.getId()) //busco en BD
+                        productTypeService
+                                .findOne(newProductType.getId()) //busco en BD
                                 .orElseThrow(() -> new RuntimeException("El tipo de producto no existe.")); //si no está en la BD lanzo exception
 
                 existingProduct.setProductType(existingProductType);

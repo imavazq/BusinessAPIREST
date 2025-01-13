@@ -5,6 +5,7 @@ import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.repository.EntryRepository;
 import com.imavazq.public_business_api_rest.repository.ProductRepository;
 import com.imavazq.public_business_api_rest.service.IEntryService;
+import com.imavazq.public_business_api_rest.service.IProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,18 +16,31 @@ import java.util.stream.StreamSupport;
 @Service
 public class EntryServiceImpl implements IEntryService {
     private EntryRepository entryRepository;
-    private ProductRepository productRepository;
 
-    public EntryServiceImpl(EntryRepository entryRepository, ProductRepository productRepository) {
+    //uso Service aunque sólo valido cosas simples como su existencia para mantener segmentación/abtracción de capas
+    private IProductService productService;
+
+    public EntryServiceImpl(EntryRepository entryRepository, IProductService productService) {
         this.entryRepository = entryRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
+    }
+
+    private void calculateTotalCost(EntryEntity entryEntity) {
+        entryEntity.setTotalCost(entryEntity.getAmount() * entryEntity.getUnitCost());
     }
 
     @Override
     public EntryEntity save(EntryEntity entryEntity) {
-        //TODO: Agregar lógica de aumento de stock de producto referenciado
+        if(!productService.isExists(entryEntity.getProduct().getId()))
+            throw new RuntimeException("El producto indicado no existe."); //si no está en la BD lanzo exception
+        //TODO: Personalizar exception
+        calculateTotalCost(entryEntity); //actualizo costo total del entry en base a amount y unit cost
+
+        //Agregar lógica de aumento de stock de producto referenciado (llevaría separar en service layer creación de full update en lugar de un único método save)
+
         return entryRepository.save(entryEntity);
     }
+
 
     @Override
     public List<EntryEntity> findAll() {
@@ -50,21 +64,21 @@ public class EntryServiceImpl implements IEntryService {
 
     @Override
     public EntryEntity partialUpdate(Long id, EntryEntity entryEntity) {
-        //TODO: Agregar validaciones de que no sean null los no null
         entryEntity.setId(id); //aseguro que no cambie id
         return entryRepository.findById(id).map(existingEntry -> {//Si encuentra existingEntry (entry resultado)
             //Si nuevo amount de entry a actualizar no es null -> se lo asigno al entry recuperado
-            //Optional.ofNullable(entryEntity.getAmount()).ifPresent(amount -> entryEntity.setAmount(amount));
+            //Optional.ofNullable(entryEntity.getAmount()).ifPresent(amount -> existingEntry.setAmount(amount));
             Optional.ofNullable(entryEntity.getAmount()).ifPresent(existingEntry::setAmount);
             Optional.ofNullable(entryEntity.getUnitCost()).ifPresent(existingEntry::setUnitCost);
-            Optional.ofNullable(entryEntity.getTotalCost()).ifPresent(existingEntry::setTotalCost);
+            //Optional.ofNullable(entryEntity.getTotalCost()).ifPresent(existingEntry::setTotalCost);
+            calculateTotalCost(existingEntry);
             Optional.ofNullable(entryEntity.getDate()).ifPresent(existingEntry::setDate);
 
             //valido que product exista en la BD antes de asignarlo (decisión de diseño que no sea CASCADE)
             Optional.ofNullable(entryEntity.getProduct()).ifPresent(newProduct -> {
                 ProductEntity existingProduct =
-                        productRepository
-                                .findById(newProduct.getId()) //busco en BD
+                        productService
+                                .findOne(newProduct.getId()) //busco en BD
                                 .orElseThrow(() -> new RuntimeException("El producto indicado no existe.")); //si no está en la BD lanzo exception
                 //TODO: Personalizar exception
                 existingEntry.setProduct(existingProduct);
