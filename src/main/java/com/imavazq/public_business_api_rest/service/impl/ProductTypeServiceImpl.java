@@ -1,6 +1,7 @@
 package com.imavazq.public_business_api_rest.service.impl;
 
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
+import com.imavazq.public_business_api_rest.exception.EntityNotFoundException;
 import com.imavazq.public_business_api_rest.repository.ProductTypeRepository;
 import com.imavazq.public_business_api_rest.service.IProductTypeService;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class ProductTypeServiceImpl implements IProductTypeService {
 
             //actualizo producType recuperado con nueva desc
             return productTypeRepository.save(existingProductType);
-        }).orElseThrow(() -> new RuntimeException("El tipo de producto no existe.")); //Si no se encuentra en la BD entro por Optional = null (devuelto por findById)
+        }).orElseThrow(() -> new EntityNotFoundException("El tipo de producto no existe.", "product_type")); //Si no se encuentra en la BD entro por Optional = null (devuelto por findById)
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.imavazq.public_business_api_rest.service.impl;
 
 import com.imavazq.public_business_api_rest.domain.entity.EntryEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
+import com.imavazq.public_business_api_rest.exception.EntityNotFoundException;
 import com.imavazq.public_business_api_rest.repository.EntryRepository;
-import com.imavazq.public_business_api_rest.repository.ProductRepository;
 import com.imavazq.public_business_api_rest.service.IEntryService;
 import com.imavazq.public_business_api_rest.service.IProductService;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class EntryServiceImpl implements IEntryService {
     @Override
     public EntryEntity save(EntryEntity entryEntity) {
         if(!productService.isExists(entryEntity.getProduct().getId()))
-            throw new RuntimeException("El producto indicado no existe."); //si no está en la BD lanzo exception
+            throw new EntityNotFoundException("El producto indicado no existe.", "product"); //si no está en la BD lanzo exception
         //TODO: Personalizar exception
         calculateTotalCost(entryEntity); //actualizo costo total del entry en base a amount y unit cost
 
@@ -79,14 +79,14 @@ public class EntryServiceImpl implements IEntryService {
                 ProductEntity existingProduct =
                         productService
                                 .findOne(newProduct.getId()) //busco en BD
-                                .orElseThrow(() -> new RuntimeException("El producto indicado no existe.")); //si no está en la BD lanzo exception
+                                .orElseThrow(() -> new EntityNotFoundException("El producto indicado no existe.", "product")); //si no está en la BD lanzo exception
                 //TODO: Personalizar exception
                 existingEntry.setProduct(existingProduct);
             });
 
             //Actualizo entry recuperado
             return entryRepository.save(existingEntry);
-        }).orElseThrow(() -> new RuntimeException("El entry no existe.")); //No se encontró el entry en la bd
+        }).orElseThrow(() -> new EntityNotFoundException("El entry no existe.", "entry")); //No se encontró el entry en la bd
     }
 
     @Override

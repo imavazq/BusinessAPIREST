@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data//Crea getter,setters,equals,hashcodes
 @NoArgsConstructor
@@ -30,8 +29,8 @@ public class EntryEntity {
     @Column(name = "total_cost", nullable = false)//NOT NULL
     private Float totalCost;
 
-    @CreationTimestamp //Asigno timestamp MV
-    @Column(columnDefinition = "TIMESTAMP(0)")//especifica que no almacena con milisegundos y microsegundos
+    @CreationTimestamp //Asigno timestamp
+    @Column(columnDefinition = "TIMESTAMP(0)", nullable = false, updatable = false)//especifica que no almacena con milisegundos y microsegundos, es obligatorio y no se puede modificar
     private LocalDateTime date; //Tiene este formato para que coincida con el de la BD
 
     //Si no especifico CASCADE, no afecta a ProductEntity

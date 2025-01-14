@@ -4,7 +4,6 @@ import com.imavazq.public_business_api_rest.domain.dto.ProductTypeDto;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.mapper.IMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component //Especifico que es Bean

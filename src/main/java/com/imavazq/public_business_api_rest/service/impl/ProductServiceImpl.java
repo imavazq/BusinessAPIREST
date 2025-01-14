@@ -2,8 +2,8 @@ package com.imavazq.public_business_api_rest.service.impl;
 
 import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
+import com.imavazq.public_business_api_rest.exception.EntityNotFoundException;
 import com.imavazq.public_business_api_rest.repository.ProductRepository;
-import com.imavazq.public_business_api_rest.repository.ProductTypeRepository;
 import com.imavazq.public_business_api_rest.service.IProductService;
 import com.imavazq.public_business_api_rest.service.IProductTypeService;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductEntity save(ProductEntity productEntity) {
         if(!productTypeService.isExists(productEntity.getProductType().getId()))
-            throw new RuntimeException("El tipo de producto no existe.");
+            throw new EntityNotFoundException("El tipo de producto no existe.", "product_type");
 
         return productRepository.save(productEntity);
     }
@@ -65,14 +65,14 @@ public class ProductServiceImpl implements IProductService {
                 ProductTypeEntity existingProductType =
                         productTypeService
                                 .findOne(newProductType.getId()) //busco en BD
-                                .orElseThrow(() -> new RuntimeException("El tipo de producto no existe.")); //si no está en la BD lanzo exception
+                                .orElseThrow(() -> new EntityNotFoundException("El tipo de producto no existe.", "product_type")); //si no está en la BD lanzo exception
 
                 existingProduct.setProductType(existingProductType);
             });
 
             //actualizo product recuperado
             return productRepository.save(existingProduct);
-        }).orElseThrow(() -> new RuntimeException("El producto no existe.")); //no se encontró en bd
+        }).orElseThrow(() -> new EntityNotFoundException("El producto no existe.", "product")); //no se encontró en bd
     }
 
     @Override

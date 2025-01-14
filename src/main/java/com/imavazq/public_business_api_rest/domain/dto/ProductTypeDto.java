@@ -1,10 +1,8 @@
 package com.imavazq.public_business_api_rest.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imavazq.public_business_api_rest.domain.dto.groups.OnPartialUpdate;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.groups.Default;

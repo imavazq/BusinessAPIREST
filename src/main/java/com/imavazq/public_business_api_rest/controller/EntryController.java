@@ -6,7 +6,6 @@ import com.imavazq.public_business_api_rest.domain.entity.EntryEntity;
 import com.imavazq.public_business_api_rest.mapper.IMapper;
 import com.imavazq.public_business_api_rest.service.IEntryService;
 import jakarta.validation.Valid;
-import org.springframework.data.jpa.domain.AbstractAuditable_;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
