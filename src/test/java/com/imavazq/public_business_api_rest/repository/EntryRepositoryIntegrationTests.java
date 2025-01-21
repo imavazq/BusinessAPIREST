@@ -34,16 +34,17 @@ public class EntryRepositoryIntegrationTests {
     @Test
     public void testThatEntryCanBeCreatedAndRecalled(){
         ProductTypeEntity productTypeEntity = TestDataUtil.createTestProductTypeA(); //creo primero el productType para asignárselo a product
-        productTypeRepository.save(productTypeEntity); //almaceno productType primero xq lo necesito para asignárselo al product
-        ProductEntity productEntity = TestDataUtil.createTestProductA(productTypeEntity);
-        productRepository.save(productEntity); //almaceno product con referencia al productType creado
+        ProductTypeEntity savedProductType = productTypeRepository.save(productTypeEntity);//almaceno productType primero xq lo necesito para asignárselo al product
+        ProductEntity productEntity = TestDataUtil.createTestProductA(savedProductType);
+        ProductEntity savedProduct = productRepository.save(productEntity);//almaceno product con referencia al productType creado
 
-        EntryEntity entryEntity = TestDataUtil.createTestEntryA(productEntity);
-        underTest.save(entryEntity);//almaceno entry en bd
+        EntryEntity entryEntity = TestDataUtil.createTestEntryA(savedProduct);
+        entryEntity.setTotalCost(entryEntity.getAmount() * entryEntity.getUnitCost());
+        EntryEntity savedEntry = underTest.save(entryEntity);//almaceno entry en bd
 
-        Optional<EntryEntity> result = underTest.findById(entryEntity.getId());
+        Optional<EntryEntity> result = underTest.findById(savedEntry.getId());
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(entryEntity);
+        assertThat(result.get()).isEqualTo(savedEntry);
     }
 
     @Test
@@ -54,8 +55,10 @@ public class EntryRepositoryIntegrationTests {
         productRepository.save(productEntity);
 
         EntryEntity entryEntityA = TestDataUtil.createTestEntryA(productEntity);
+        entryEntityA.setTotalCost(entryEntityA.getAmount() * entryEntityA.getUnitCost());
         underTest.save(entryEntityA);//almaceno entry en bd
         EntryEntity entryEntityB = TestDataUtil.createTestEntryB(productEntity);
+        entryEntityB.setTotalCost(entryEntityB.getAmount() * entryEntityB.getUnitCost());
         underTest.save(entryEntityB);//almaceno entry en bd
 
         Iterable<EntryEntity> result = underTest.findAll();
@@ -72,6 +75,7 @@ public class EntryRepositoryIntegrationTests {
         productRepository.save(productEntity);
 
         EntryEntity entryEntity = TestDataUtil.createTestEntryA(productEntity);
+        entryEntity.setTotalCost(entryEntity.getAmount() * entryEntity.getUnitCost());
         underTest.save(entryEntity);//almaceno entry en bd
 
         entryEntity.setAmount(2);
@@ -91,6 +95,7 @@ public class EntryRepositoryIntegrationTests {
         productRepository.save(productEntity);
 
         EntryEntity entryEntity = TestDataUtil.createTestEntryA(productEntity);
+        entryEntity.setTotalCost(entryEntity.getAmount() * entryEntity.getUnitCost());
         underTest.save(entryEntity);//almaceno entry en bd
 
         underTest.deleteById(entryEntity.getId());//elimino entry de la bd

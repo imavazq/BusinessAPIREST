@@ -1,7 +1,6 @@
 package com.imavazq.public_business_api_rest.repository;
 
 import com.imavazq.public_business_api_rest.TestDataUtil;
-import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +28,8 @@ public class ProductTypeRepositoryIntegrationTests {
     public void testThatProductTypeCanBeCreatedAndRecalled(){
         ProductTypeEntity productTypeEntity = TestDataUtil.createTestProductTypeA();
 
-        underTest.save(productTypeEntity);//almaceno en BD
-        Optional<ProductTypeEntity> result = underTest.findById(productTypeEntity.getId()); //recupero de BD
+        ProductTypeEntity savedProductType = underTest.save(productTypeEntity);//almaceno en BD
+        Optional<ProductTypeEntity> result = underTest.findById(savedProductType.getId()); //recupero de BD
 
         assertThat(result).isPresent(); //valido que haya devuelto algo
         assertThat(result.get()).isEqualTo(productTypeEntity); //valido que sea el mismo productType almacenado
@@ -52,12 +51,12 @@ public class ProductTypeRepositoryIntegrationTests {
     @Test
     public void testThatProductTypeCanBeUpdated(){
         ProductTypeEntity productTypeEntity = TestDataUtil.createTestProductTypeA();
-        underTest.save(productTypeEntity);
+        ProductTypeEntity savedProductType = underTest.save(productTypeEntity);
 
         productTypeEntity.setDescription("UPDATED");//actualizo desc de java object
         underTest.save(productTypeEntity);//actualizo productType almacenado antes
 
-        Optional<ProductTypeEntity> result = underTest.findById(productTypeEntity.getId());
+        Optional<ProductTypeEntity> result = underTest.findById(savedProductType.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(productTypeEntity);
         assertThat(result.get().getDescription()).isEqualTo("UPDATED"); //valido que tenga desc actualizada
@@ -66,10 +65,10 @@ public class ProductTypeRepositoryIntegrationTests {
     @Test
     public void testThatProductTypeCanBeDeleted(){
         ProductTypeEntity productTypeEntity = TestDataUtil.createTestProductTypeA();
-        underTest.save(productTypeEntity);
+        ProductTypeEntity savedProductType = underTest.save(productTypeEntity);
 
-        underTest.deleteById(productTypeEntity.getId()); //elimino productType almacenado antes
-        Optional<ProductTypeEntity> result = underTest.findById(productTypeEntity.getId());
+        underTest.deleteById(savedProductType.getId()); //elimino productType almacenado antes
+        Optional<ProductTypeEntity> result = underTest.findById(savedProductType.getId());
         assertThat(result).isEmpty(); //valido que se haya eliminado de la BD
     }
 }

@@ -232,8 +232,9 @@ public class ProductControllerIntegrationTest {
         ProductEntity testProductEntityA = TestDataUtil.createTestProductA(savedProductTypeEntity);
         productService.save(testProductEntityA);
 
-        //creo product dto con mismo id y productType para usar su body en update
+        //creo product dto con mismo productType (mismo id que el almacenado) para usar su body en update
         ProductTypeDto testProductTypeDtoA = TestDataUtil.createTestProductTypeDtoA();
+        testProductTypeDtoA.setId(1L); //Aseguro que id de productType sea el mismo que el almacenado
         ProductDto testProductDtoA = TestDataUtil.createTestProductDtoA(testProductTypeDtoA);
         //convierto a json con formato dto para pasar en body
         String productDtoJson = objectMapper.writeValueAsString(testProductDtoA);
@@ -274,9 +275,11 @@ public class ProductControllerIntegrationTest {
         productService.save(testProductEntityA);
 
         //creo product distinto al almacenado en bd
-        ProductTypeDto testProductTypeDtoA = TestDataUtil.createTestProductTypeDtoA(); //uso mismo productType para no guardarlo en BD
+        ProductTypeDto testProductTypeDtoA = TestDataUtil.createTestProductTypeDtoA(); //uso mismo productType para no volver a guardar en BD
+        testProductTypeDtoA.setId(1L); //Aseguro que id de productType sea el mismo que el almacenado
+
         ProductDto testProductDtoB = TestDataUtil.createTestProductDtoB(testProductTypeDtoA);
-        testProductDtoB.setId(testProductEntityA.getId()); //aseguro mismo id
+        //testProductDtoB.setId(testProductEntityA.getId()); //aseguro mismo id
 
         String productDtoUpdateJson = objectMapper.writeValueAsString(testProductDtoB);//convierto a json para pasar en body
 
@@ -316,6 +319,8 @@ public class ProductControllerIntegrationTest {
 
         //creo product dto con mismo id y productType para usar su body en update
         ProductTypeDto testProductTypeDtoA = TestDataUtil.createTestProductTypeDtoA();
+        testProductTypeDtoA.setId(1L); //Aseguro que id de productType sea el mismo que el almacenado
+
         ProductDto testProductDtoA = TestDataUtil.createTestProductDtoA(testProductTypeDtoA);
         testProductDtoA.setArticle("UPDATED"); //Actualizo un valor
         //convierto a json con formato dto para pasar en body
@@ -337,7 +342,7 @@ public class ProductControllerIntegrationTest {
         String productDtoJson = objectMapper.writeValueAsString(testProductDtoA);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.patch("/api/v1/product/" + testProductDtoA.getId())
+                MockMvcRequestBuilders.patch("/api/v1/product/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productDtoJson)
         ).andExpect(
@@ -357,6 +362,8 @@ public class ProductControllerIntegrationTest {
 
         //creo product dto con mismo id y productType para usar su body en update
         ProductTypeDto testProductTypeDtoA = TestDataUtil.createTestProductTypeDtoA();
+        testProductTypeDtoA.setId(1L); //Aseguro que id de productType sea el mismo que el almacenado
+
         ProductDto testProductDtoA = TestDataUtil.createTestProductDtoA(testProductTypeDtoA);
         testProductDtoA.setArticle("UPDATED"); //Actualizo algunos valores
         testProductDtoA.setPrice(1000.0F);

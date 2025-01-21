@@ -1,15 +1,12 @@
 package com.imavazq.public_business_api_rest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imavazq.public_business_api_rest.TestDataUtil;
 import com.imavazq.public_business_api_rest.domain.dto.ProductTypeDto;
-import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.service.IProductTypeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import javax.print.attribute.standard.Media;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -174,7 +169,6 @@ public class ProductTypeControllerIntegrationTest {
 
         //creo un productType distinto para hacer update con sus datos
         ProductTypeDto testProductTypeDtoB = TestDataUtil.createTestProductTypeDtoB();
-        testProductTypeDtoB.setId(testProductTypeAEntity.getId()); //aseguro mismo id
         String productTypeDtoUpdateJson = objectMapper.writeValueAsString(testProductTypeDtoB); //convierto a json para pasar en body
 
         mockMvc.perform(
@@ -200,7 +194,7 @@ public class ProductTypeControllerIntegrationTest {
         String productTypeDtoJson = objectMapper.writeValueAsString(testProductTypeADto);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.patch("/api/v1/productType/" + testProductTypeADto.getId())
+                MockMvcRequestBuilders.patch("/api/v1/productType/" + testProductTypeAEntity.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productTypeDtoJson)
         ).andExpect(MockMvcResultMatchers.status().isOk()); //valido que devuelva status 200 ok

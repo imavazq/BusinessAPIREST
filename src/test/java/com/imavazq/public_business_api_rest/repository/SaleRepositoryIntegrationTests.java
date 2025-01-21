@@ -1,7 +1,6 @@
 package com.imavazq.public_business_api_rest.repository;
 
 import com.imavazq.public_business_api_rest.TestDataUtil;
-import com.imavazq.public_business_api_rest.domain.entity.EntryEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductEntity;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.domain.entity.SaleEntity;

@@ -30,7 +30,7 @@ public class EntryEntity {
     private Float totalCost;
 
     @CreationTimestamp //Asigno timestamp
-    @Column(columnDefinition = "TIMESTAMP(0)", nullable = false, updatable = false)//especifica que no almacena con milisegundos y microsegundos, es obligatorio y no se puede modificar
+    @Column(nullable = false, updatable = false)//especifica que es obligatorio y no se puede modificar
     private LocalDateTime date; //Tiene este formato para que coincida con el de la BD
 
     //Si no especifico CASCADE, no afecta a ProductEntity
