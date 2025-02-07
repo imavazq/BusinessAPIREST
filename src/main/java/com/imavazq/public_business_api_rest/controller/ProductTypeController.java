@@ -5,6 +5,10 @@ import com.imavazq.public_business_api_rest.domain.dto.groups.OnPartialUpdate;
 import com.imavazq.public_business_api_rest.domain.entity.ProductTypeEntity;
 import com.imavazq.public_business_api_rest.mapper.IMapper;
 import com.imavazq.public_business_api_rest.service.IProductTypeService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController//Especificamos que se trata de una rest API
+@Tag(name = "Product Type")
 public class ProductTypeController {
     private IProductTypeService productTypeService;
     private IMapper<ProductTypeEntity, ProductTypeDto> productTypeMapper;
@@ -29,7 +34,19 @@ public class ProductTypeController {
         this.productTypeMapper = productTypeMapper;
     }
 
+    @Operation(
+            description = "Post endpoint for Product Type",
+            summary = "Creation of a product type",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "201"
+                    )
+            },
+            deprecated = false
+    )
     @PostMapping(path = "/api/v1/productType")
+    //@Hidden //por si quisiera ocultarlo
     public ResponseEntity<ProductTypeDto> createProductType(@Valid @RequestBody ProductTypeDto productTypeDto){
         ProductTypeEntity productTypeEntity = productTypeMapper.mapFrom(productTypeDto);//Pasamos de DTO a Entity
         ProductTypeEntity savedProductTypeEntity = productTypeService.save(productTypeEntity);
